@@ -5,23 +5,23 @@ A production-ready anomaly detection API for IoT sensor data with real-time moni
 
 
 
-\- \*\*Real-time Anomaly Detection\*\*: Detect anomalies in streaming sensor data
+\- Real-time Anomaly Detection: Detect anomalies in streaming sensor data
 
-\- \*\*RESTful API\*\*: Fully documented FastAPI endpoints
+\- RESTful API: Fully documented FastAPI endpoints
 
-\- \*\*Multiple Algorithms\*\*: Isolation Forest, One-Class SVM, Local Outlier Factor
+\- Multiple Algorithms: Isolation Forest, One-Class SVM, Local Outlier Factor
 
-\- \*\*WebSocket Support\*\*: Real-time anomaly alerts
+\- WebSocket Support: Real-time anomaly alerts
 
-\- \*\*Dashboard\*\*: Interactive web dashboard
+\- Dashboard: Interactive web dashboard
 
-\- \*\*Model Management\*\*: Versioning, training, and evaluation
+\- Model Management: Versioning, training, and evaluation
 
-\- \*\*Monitoring\*\*: System metrics and health checks
+\- Monitoring: System metrics and health checks
 
-\- \*\*Alert System\*\*: Email/Slack/Teams notifications
+\- Alert System: Email/Slack/Teams notifications
 
-\- \*\*Docker Support\*\*: Easy deployment with Docker Compose
+\- Docker Support: Easy deployment with Docker Compose
 
 _____________________________________________________________________________________________________________________________________________________________________________
 
