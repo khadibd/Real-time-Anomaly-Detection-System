@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnomaLens Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            font-size: 1.8rem;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .anomaly {
+            color: #ff6b6b;
+        }
+        
+        .normal {
+            color: #51cf66;
+        }
+        
+        .warning {
+            color: #ffd43b;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        button.primary {
+            background: #4dabf7;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: rgba(255, 107, 107, 0.2);
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .alert h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .timestamp {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 AnomaLens</h1>
+            <p class="tagline">Real-time Anomaly Detection Dashboard</p>
+        </header>
+        
+        <div class="dashboard">
+            <!-- System Status Card -->
+            <div class="card">
+                <h2><i>📊</i> System Status</h2>
+                <div class="stat">
+                    <span class="stat-label">API Status</span>
+                    <span class="stat-value normal" id="apiStatus">Healthy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Model Status</span>
+                    <span class="stat-value normal" id="modelStatus">Ready</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Uptime</span>
+                    <span class="stat-value" id="uptime">00:00:00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total Predictions</span>
+                    <span class="stat-value" id="totalPredictions">0</span>
+                </div>
+            </div>
+            
+            <!-- Real-time Detection Card -->
+            <div class="card">
+                <h2><i>⚡</i> Live Detection</h2>
+                <div class="input-group">
+                    <input type="text" id="sensorId" placeholder="Sensor ID (e.g., sensor_001)">
+                </div>
+                <div class="controls">
+                    <input type="number" id="temperature" placeholder="Temperature (°C)" step="0.1">
+                    <input type="number" id="pressure" placeholder="Pressure (hPa)" step="0.1">
+                </div>
+                <div class="controls">
+                    <input type="number" id="humidity" placeholder="Humidity (%)" step="0.1">
+                    <input type="number" id="vibration" placeholder="Vibration" step="0.01">
+                </div>
+                <button class="primary" onclick="predictAnomaly()">🔍 Detect Anomaly</button>
+                
+                <div id="predictionResult" style="margin-top: 20px;"></div>
+            </div>
+            
+            <!-- Anomaly Statistics Card -->
+            <div class="card">
+                <h2><i>📈</i> Anomaly Statistics</h2>
+                <div class="stat">
+                    <span class="stat-label">Anomalies Detected</span>
+                    <span class="stat-value anomaly" id="anomaliesDetected">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Anomaly Rate</span>
+                    <span class="stat-value" id="anomalyRate">0%</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Critical Alerts</span>
+                    <span class="stat-value anomaly" id="criticalAlerts">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Avg Confidence</span>
+                    <span class="stat-value" id="avgConfidence">0%</span>
+                </div>
+            </div>
+            
+            <!-- Recent Alerts Card -->
+            <div class="card" style="grid-column: span 2;">
+                <h2><i>🚨</i> Recent Alerts</h2>
+                <div id="alertsList">
+                    <div class="alert">
+                        <h3><i>⚠️</i> No alerts yet</h3>
+                        <p>Start detecting anomalies to see alerts here</p>
+                        <p class="timestamp">Just now</p>
+                    </div>
+                </div>
+                <button onclick="loadRecentAlerts()">🔄 Refresh Alerts</button>
+            </div>
+            
+            <!-- Charts Card -->
+            <div class="card" style="grid-column: span 2;">
+                <h2><i>📊</i> Live Metrics</h2>
+                <div class="chart-container">
+                    <canvas id="anomalyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>AnomaLens v1.0.0 | Real-time Anomaly Detection System</p>
+            <p>API Endpoint: <code id="apiUrl">http://localhost:8000</code></p>
+        </footer>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_URL = 'http://localhost:8000';
+        document.getElementById('apiUrl').textContent = API_URL;
+        
+        // Initialize Chart
+        const ctx = document.getElementById('anomalyChart').getContext('2d');
+        const anomalyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Anomaly Score',
+                    data: [],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Normal Threshold',
+                    data: [],
+                    borderColor: '#51cf66',
+                    borderDash: [5, 5],
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Update chart data
+        function updateChart(score) {
+            const now = new Date();
+            const timeLabel = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+            
+            anomalyChart.data.labels.push(timeLabel);
+            anomalyChart.data.datasets[0].data.push(score);
+            anomalyChart.data.datasets[1].data.push(0.6); // Warning threshold
+            
+            // Keep only last 20 data points
+            if (anomalyChart.data.labels.length > 20) {
+                anomalyChart.data.labels.shift();
+                anomalyChart.data.datasets[0].data.shift();
+                anomalyChart.data.datasets[1].data.shift();
+            }
+            
+            anomalyChart.update();
+        }
+        
+        // Uptime counter
+        let startTime = Date.now();
+        function updateUptime() {
+            const elapsed = Date.now() - startTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            document.getElementById('uptime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        setInterval(updateUptime, 1000);
+        
+        // Health check
+        async function checkHealth() {
+            try {
+                const response = await axios.get(`${API_URL}/health`);
+                document.getElementById('apiStatus').textContent = 'Healthy';
+                document.getElementById('apiStatus').className = 'stat-value normal';
+                document.getElementById('modelStatus').textContent = response.data.model_status === 'healthy' ? 'Ready' : 'Not Ready';
+                document.getElementById('modelStatus').className = response.data.model_status === 'healthy' ? 'stat-value normal' : 'stat-value warning';
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = 'Unhealthy';
+                document.getElementById('apiStatus').className = 'stat-value anomaly';
+            }
+        }
+        setInterval(checkHealth, 30000);
+        checkHealth(); // Initial check
+        
+        // Predict anomaly
+        async function predictAnomaly() {
+            const sensorId = document.getElementById('sensorId').value || `sensor_${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+            const temperature = parseFloat(document.getElementById('temperature').value) || 20 + (Math.random() * 4 - 2);
+            const pressure = parseFloat(document.getElementById('pressure').value) || 1013 + (Math.random() * 20 - 10);
+            const humidity = parseFloat(document.getElementById('humidity').value) || 50 + (Math.random() * 10 - 5);
+            const vibration = parseFloat(document.getElementById('vibration').value) || Math.random() * 0.5;
+            
+            try {
+                const response = await axios.post(`${API_URL}/api/v1/predict`, {
+                    sensor_id: sensorId,
+                    temperature: temperature,
+                    pressure: pressure,
+                    humidity: humidity,
+                    vibration: vibration
+                });
+                
+                const prediction = response.data;
+                const resultDiv = document.getElementById('predictionResult');
+                
+                let statusClass = prediction.is_anomaly ? 'anomaly' : 'normal';
+                let statusIcon = prediction.is_anomaly ? '🚨' : '✅';
+                let statusText = prediction.is_anomaly ? 'ANOMALY DETECTED' : 'NORMAL';
+                
+                resultDiv.innerHTML = `
+                    <div class="stat">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value ${statusClass}">${statusIcon} ${statusText}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Anomaly Score</span>
+                        <span class="stat-value">${(prediction.anomaly_score * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Confidence</span>
+                        <span class="stat-value">${(prediction.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Severity</span>
+                        <span class="stat-value ${prediction.severity}">${prediction.severity.toUpperCase()}</span>
+                    </div>
+                `;
+                
+                // Update statistics
+                updateStatistics(prediction);
+                
+                // Update chart
+                updateChart(prediction.anomaly_score);
+                
+                // Add to alerts if anomaly
+                if (prediction.is_anomaly) {
+                    addAlert({
+                        sensor_id: sensorId,
+                        anomaly_score: prediction.anomaly_score,
+                        severity: prediction.severity,
+                        timestamp: new Date().toISOString(),
+                        features: {
+                            temperature: temperature,
+                            pressure: pressure
+                        }
+                    });
+                }
+                
+            } catch (error) {
+                document.getElementById('predictionResult').innerHTML = `
+                    <div class="alert">
+                        <h3><i>❌</i> Error</h3>
+                        <p>${error.response?.data?.detail || error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Update statistics
+        let totalPredictions = 0;
+        let anomaliesDetected = 0;
+        let totalScore = 0;
+        
+        function updateStatistics(prediction) {
+            totalPredictions++;
+            if (prediction.is_anomaly) {
+                anomaliesDetected++;
+            }
+            totalScore += prediction.anomaly_score;
+            
+            document.getElementById('totalPredictions').textContent = totalPredictions;
+            document.getElementById('anomaliesDetected').textContent = anomaliesDetected;
+            document.getElementById('anomalyRate').textContent = totalPredictions > 0 ? 
+                `${((anomaliesDetected / totalPredictions) * 100).toFixed(1)}%` : '0%';
+            document.getElementById('avgConfidence').textContent = totalPredictions > 0 ? 
+                `${((totalScore / totalPredictions) * 100).toFixed(1)}%` : '0%';
+        }
+        
+        // Alert management
+        let alerts = [];
+        
+        function addAlert(alertData) {
+            const alert = {
+                id: Date.now(),
+                ...alertData
+            };
+            alerts.unshift(alert); // Add to beginning
+            
+            // Keep only last 10 alerts
+            if (alerts.length > 10) {
+                alerts.pop();
+            }
+            
+            updateAlertsDisplay();
+        }
+        
+        function updateAlertsDisplay() {
+            const alertsList = document.getElementById('alertsList');
+            
+            if (alerts.length === 0) {
+                alertsList.innerHTML = `
+                    <div class="alert">
+                        <h3><i>⚠️</i> No alerts yet</h3>
+                        <p>Start detecting anomalies to see alerts here</p>
+                        <p class="timestamp">Just now</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            alertsList.innerHTML = alerts.map(alert => `
+                <div class="alert">
+                    <h3><i>${alert.severity === 'critical' ? '🚨' : '⚠️'}</i> ${alert.sensor_id} - ${alert.severity.toUpperCase()}</h3>
+                    <p>Anomaly score: ${(alert.anomaly_score * 100).toFixed(1)}% | Temp: ${alert.features?.temperature?.toFixed(1) || 'N/A'}°C</p>
+                    <p class="timestamp">${new Date(alert.timestamp).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+        
+        async function loadRecentAlerts() {
+            try {
+                const response = await axios.get(`${API_URL}/api/v1/alerts?hours=1`);
+                alerts = response.data.map(alert => ({
+                    id: alert.alert_id,
+                    sensor_id: alert.sensor_id,
+                    anomaly_score: alert.anomaly_score,
+                    severity: alert.severity,
+                    timestamp: alert.timestamp,
+                    features: {
+                        temperature: alert.data.temperature,
+                        pressure: alert.data.pressure
+                    }
+                }));
+                updateAlertsDisplay();
+            } catch (error) {
+                console.error('Failed to load alerts:', error);
+            }
+        }
+        
+        // Auto-refresh alerts every 30 seconds
+        setInterval(loadRecentAlerts, 30000);
+        
+        // Demo mode: auto-generate predictions
+        let demoMode = false;
+        let demoInterval;
+        
+        function toggleDemoMode() {
+            demoMode = !demoMode;
+            
+            if (demoMode) {
+                // Start demo mode
+                demoInterval = setInterval(() => {
+                    // Generate random sensor data
+                    document.getElementById('sensorId').value = `sensor_${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+                    document.getElementById('temperature').value = (20 + Math.random() * 4 - 2).toFixed(1);
+                    document.getElementById('pressure').value = (1013 + Math.random() * 20 - 10).toFixed(1);
+                    document.getElementById('humidity').value = (50 + Math.random() * 10 - 5).toFixed(1);
+                    document.getElementById('vibration').value = Math.random().toFixed(2);
+                    
+                    // Trigger prediction
+                    predictAnomaly();
+                }, 5000); // Every 5 seconds
+                
+                document.getElementById('demoBtn').textContent = '🛑 Stop Demo';
+            } else {
+                // Stop demo mode
+                clearInterval(demoInterval);
+                document.getElementById('demoBtn').textContent = '🎬 Start Demo';
+            }
+        }
+        
+        // Add demo button to HTML
+        document.querySelector('.controls').innerHTML += '<button id="demoBtn" onclick="toggleDemoMode()">🎬 Start Demo</button>';
+        
+        // Initialize with some data
+        setTimeout(() => {
+            document.getElementById('sensorId').value = 'sensor_001';
+            document.getElementById('temperature').value = '22.5';
+            document.getElementById('pressure').value = '1013.2';
+            document.getElementById('humidity').value = '52.1';
+            document.getElementById('vibration').value = '0.12';
+        }, 1000);
+    </script>
+</body>
+</html>
