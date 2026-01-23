@@ -26,7 +26,7 @@ A production-ready anomaly detection API for IoT sensor data with real-time moni
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-\## 🏗️ Architecture
+### 🏗️ Architecture
 
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
 
@@ -50,11 +50,11 @@ ________________________________________________________________________________
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-\## 🚀 Quick Start
+### 🚀 Quick Start
 
 
 
-\### 1. Installation
+### 1. Installation
 
 
 
@@ -86,7 +86,7 @@ pip install -r requirements.txt
 
 
 
-2\. Start the API
+### 2. Start the API
 
 
 
@@ -105,7 +105,7 @@ The API will be available at: http://localhost:8000
 
 
 
-3\. Access the Dashboard
+### 3. Access the Dashboard
 
 
 ```bash
@@ -113,7 +113,7 @@ Open your browser and go to: http://localhost:8000/dashboard
 ```
 
 
-4\. Test the API
+### 4. Test the API
 
 
 
@@ -127,7 +127,7 @@ python test\_api.py
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-📚 API Documentation
+### 📚 API Documentation
 
 
 ```bash
@@ -145,7 +145,7 @@ ________________________________________________________________________________
 
 
 
-🐳 Docker Deployment
+### 🐳 Docker Deployment
 
 
 ```bash
@@ -180,7 +180,7 @@ docker-compose down
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-📊 Monitoring \& Observability
+### 📊 Monitoring \& Observability
 
 
 
@@ -212,7 +212,7 @@ MLflow: Experiment tracking at http://localhost:5000
 
 _____________________________________________________________________________________________________________________________________________________________________________
 
-🤖 MLOps Features
+### 🤖 MLOps Features
 
 Model Management
 
@@ -255,7 +255,7 @@ Monitoring and retraining
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-🧪 Testing
+### 🧪 Testing
 
 
 ```bash
@@ -283,7 +283,7 @@ ________________________________________________________________________________
 
 
 
-📈 Performance
+### 📈 Performance
 
 Latency: < 50ms per prediction
 
@@ -302,7 +302,7 @@ Scalability: Horizontal scaling with Docker
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-🔒 Security
+### 🔒 Security
 
 CORS configuration
 
@@ -325,7 +325,7 @@ HTTPS support (planned)
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-📁 Project Structure
+### 📁 Project Structure
 
 
 ```bash
@@ -375,9 +375,9 @@ AnomaLens/
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-🚀 Production Deployment
+### 🚀 Production Deployment
 
-1\. Environment Setup
+### 1. Environment Setup
 
 
 ```bash
@@ -390,7 +390,7 @@ export PORT=80
 
 
 
-2\. Database Setup
+### 2. Database Setup
 
 
 ```bash
@@ -401,7 +401,7 @@ docker run --name anomalens-db -e POSTGRES\_PASSWORD=secret -d postgres
 
 
 
-3\. Deploy with Docker
+### 3. Deploy with Docker
 
 
 ```bash
@@ -411,7 +411,7 @@ docker build -t anomalens:latest .
 ```
 
 
-4\. Deploy to Cloud
+### 4. Deploy to Cloud
 
 AWS: ECS/EKS with Fargate
 
@@ -432,7 +432,7 @@ ________________________________________________________________________________
 
 🎯 Use Cases
 
-1\. Industrial IoT
+### 1. Industrial IoT
 
 Predictive maintenance
 
@@ -446,7 +446,7 @@ Quality control
 
 
 
-2\. Smart Cities
+### 2. Smart Cities
 
 Traffic pattern analysis
 
@@ -460,7 +460,7 @@ Environmental monitoring
 
 
 
-3\. Healthcare
+### 3. Healthcare
 
 Patient monitoring
 
@@ -474,7 +474,7 @@ Hospital equipment management
 
 
 
-4\. Finance
+### 4. Finance
 
 Fraud detection
 
@@ -489,7 +489,7 @@ Risk assessment
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-🤝 Contributing
+### 🤝 Contributing
 
 Fork the repository
 
@@ -512,7 +512,7 @@ Submit a pull request
 
 _____________________________________________________________________________________________________________________________________________________________________________
 
-📄 License
+### 📄 License
 
 MIT License - see LICENSE file
 
@@ -520,7 +520,7 @@ MIT License - see LICENSE file
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-🙏 Acknowledgments
+### 🙏 Acknowledgments
 
 Built with FastAPI
 
@@ -544,12 +544,12 @@ Containerization with Docker
 _____________________________________________________________________________________________________________________________________________________________________________
 
 
-👩‍💻 Author
+### 👩‍💻 Author
 
 Eng. Khadija Bouadi
 
 
-📧 Contact
+### 📧 Contact
 
 For any queries, reach out to:
 
