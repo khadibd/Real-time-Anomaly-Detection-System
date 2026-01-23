@@ -1,12 +1,7 @@
-\# 🚀 AnomaLens - Real-time Anomaly Detection System
-
-
-
 A production-ready anomaly detection API for IoT sensor data with real-time monitoring, alerting, and MLOps capabilities.
 
 
-
-\## ✨ Features
+✨ Features
 
 
 
@@ -28,6 +23,7 @@ A production-ready anomaly detection API for IoT sensor data with real-time moni
 
 \- \*\*Docker Support\*\*: Easy deployment with Docker Compose
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 \## 🏗️ Architecture
@@ -51,7 +47,7 @@ A production-ready anomaly detection API for IoT sensor data with real-time moni
 └─────────────┘ └─────────────┘ └─────────────┘
 
 
-
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 \## 🚀 Quick Start
@@ -66,24 +62,26 @@ A production-ready anomaly detection API for IoT sensor data with real-time moni
 
 \# Clone repository
 
-git clone https://github.com/yourusername/AnomaLens.git
+git clone https://github.com/khadibd/AnomaLens---Real-time-Anomaly-Detection-System
 
 cd AnomaLens
+```
 
 
-
+```bash
 \# Create virtual environment
 
 python -m venv venv
 
 source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+```
 
 
-
+```bash
 \# Install dependencies
 
 pip install -r requirements.txt
-
+```
 
 
 
@@ -92,40 +90,47 @@ pip install -r requirements.txt
 
 
 
+```bash
 \# Run the FastAPI server
 
 python -m api.main
+```
 
 
 
-
-
+```bash
 The API will be available at: http://localhost:8000
 
-
+```
 
 
 
 3\. Access the Dashboard
 
-Open your browser and go to: http://localhost:8000/dashboard
 
+```bash
+Open your browser and go to: http://localhost:8000/dashboard
+```
 
 
 4\. Test the API
 
 
 
+```bash
 \# Run the test suite
 
 python test\_api.py
+```
 
 
-
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 📚 API Documentation
 
+
+```bash
 Interactive Docs
 
 Swagger UI: http://localhost:8000/docs
@@ -134,116 +139,45 @@ Swagger UI: http://localhost:8000/docs
 
 ReDoc: http://localhost:8000/redoc
 
+```
 
-
-
-
-Key Endpoints
-
-
-
-
-
-Method	Endpoint	Description
-
-GET	/health	Health check
-
-POST	/api/v1/predict	Single prediction
-
-POST	/api/v1/predict/batch	Batch prediction
-
-GET	/api/v1/model	Model information
-
-POST	/api/v1/model/train	Train new model
-
-GET	/api/v1/alerts	Recent alerts
-
-GET	/api/v1/metrics	System metrics
-
-WS	/ws	WebSocket for real-time updates
-
-
-
-
-
-🔧 Configuration
-
-
-
-Create a .env file:
-
-
-
-\# API Settings
-
-HOST=0.0.0.0
-
-PORT=8000
-
-DEBUG=True
-
-
-
-\# Model Settings
-
-MODEL\_PATH=models/anomaly\_detector.joblib
-
-MODEL\_TYPE=isolation\_forest
-
-DEFAULT\_CONTAMINATION=0.1
-
-
-
-\# Alert Settings
-
-ALERT\_THRESHOLD\_CRITICAL=0.8
-
-ALERT\_THRESHOLD\_WARNING=0.6
-
-
-
-\# Email Settings (for alerts)
-
-SMTP\_SERVER=smtp.gmail.com
-
-SMTP\_PORT=587
-
-SMTP\_USERNAME=your\_email@gmail.com
-
-SMTP\_PASSWORD=your\_password
-
-
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 
 🐳 Docker Deployment
 
 
-
+```bash
 \# Build and run with Docker Compose
 
 docker-compose up --build
+```
 
 
+```bash
 
 \# Run in background
 
 docker-compose up -d
+```
 
 
-
+```bash
 \# View logs
 
 docker-compose logs -f
+```
 
 
-
+```bash
 \# Stop services
 
 docker-compose down
+```
 
 
-
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 📊 Monitoring \& Observability
@@ -276,7 +210,7 @@ Grafana: Pre-built dashboards available
 
 MLflow: Experiment tracking at http://localhost:5000
 
-
+_____________________________________________________________________________________________________________________________________________________________________________
 
 🤖 MLOps Features
 
@@ -318,29 +252,34 @@ Model deployment and serving
 
 Monitoring and retraining
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🧪 Testing
 
 
-
+```bash
 \# Run unit tests
 
 pytest tests/
+```
 
 
-
+```bash
 \# Run with coverage
 
 pytest --cov=api tests/
+```
 
 
-
+```bash
 \# Run performance tests
 
 python test\_api.py
+```
 
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 
@@ -360,6 +299,7 @@ Accuracy: 95%+ on synthetic data
 
 Scalability: Horizontal scaling with Docker
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🔒 Security
@@ -382,11 +322,13 @@ Rate limiting (planned)
 
 HTTPS support (planned)
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 📁 Project Structure
 
 
+```bash
 
 AnomaLens/
 
@@ -428,7 +370,9 @@ AnomaLens/
 ├── docker-compose.yml  # Docker Compose
 
 └── README.md           # This file
+```
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🚀 Production Deployment
@@ -436,47 +380,35 @@ AnomaLens/
 1\. Environment Setup
 
 
-
+```bash
 \# Set production environment
 
 export DEBUG=False
 
 export PORT=80
+```
 
 
 
 2\. Database Setup
 
 
-
+```bash
 \# Setup PostgreSQL (optional)
 
 docker run --name anomalens-db -e POSTGRES\_PASSWORD=secret -d postgres
+```
 
 
 
 3\. Deploy with Docker
 
 
-
+```bash
 \# Build production image
 
 docker build -t anomalens:latest .
-
-
-
-\# Run with production settings
-
-docker run -d -p 80:80 \\
-
-&nbsp; -e DEBUG=False \\
-
-&nbsp; -e DATABASE\_URL=postgresql://user:pass@db:5432/anomalens \\
-
-&nbsp; anomalens:latest
-
-
-
+```
 
 
 4\. Deploy to Cloud
@@ -495,6 +427,7 @@ Azure: AKS or App Service
 
 Heroku: Simple one-click deploy
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🎯 Use Cases
@@ -553,6 +486,7 @@ Transaction monitoring
 
 Risk assessment
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🤝 Contributing
@@ -576,11 +510,14 @@ Add tests
 Submit a pull request
 
 
+_____________________________________________________________________________________________________________________________________________________________________________
 
 📄 License
 
 MIT License - see LICENSE file
 
+
+_____________________________________________________________________________________________________________________________________________________________________________
 
 
 🙏 Acknowledgments
@@ -602,6 +539,25 @@ Monitoring with Prometheus/Grafana
 
 
 Containerization with Docker
+
+
+_____________________________________________________________________________________________________________________________________________________________________________
+
+
+👩‍💻 Author
+
+Eng. Khadija Bouadi
+
+
+📧 Contact
+
+For any queries, reach out to:
+
+GitHub: @khadibd
+
+Email:  khadijabouadi00@gmail.com 
+
+
 
 
 
