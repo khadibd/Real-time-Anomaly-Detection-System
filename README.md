@@ -62,7 +62,7 @@ ________________________________________________________________________________
 
 \# Clone repository
 
-git clone https://github.com/khadibd/AnomaLens---Real-time-Anomaly-Detection-System
+git clone https://github.com/khadibd/Real-time-Anomaly-Detection-System
 
 cd AnomaLens
 ```
